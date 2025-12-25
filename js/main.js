@@ -82,11 +82,6 @@ class VoiceNotesApp {
             console.warn('Pause button not found in DOM');
         }
 
-        // Record button (hidden but functional)
-        document.getElementById('recordBtn').addEventListener('click', () => {
-            this.toggleRecording();
-        });
-
         // Done button
         document.getElementById('doneBtn').addEventListener('click', () => {
             this.stopAndSaveRecording();

@@ -71,17 +71,15 @@ class UIController {
      */
     setRecordingState(isRecording) {
         const indicator = document.querySelector('.recording-indicator');
-        const recordBtn = document.getElementById('recordBtn');
         const doneBtn = document.getElementById('doneBtn');
+
+        // The recording interface is active, so doneBtn should always be visible
+        if (doneBtn) doneBtn.style.display = 'flex';
 
         if (isRecording) {
             if (indicator) indicator.classList.add('active');
-            if (recordBtn) recordBtn.style.display = 'none'; // Hide record button
-            if (doneBtn) doneBtn.style.display = 'flex';   // Show done button
         } else {
             if (indicator) indicator.classList.remove('active');
-            if (recordBtn) recordBtn.style.display = 'flex'; // Show record button
-            if (doneBtn) doneBtn.style.display = 'none';   // Hide done button
         }
     }
 
@@ -120,7 +118,7 @@ class UIController {
         // Render each recording
         recordings.forEach((recording, index) => {
             let noteCard = container.querySelector(`[data-id="${recording.id}"]`);
-            
+
             if (!noteCard) {
                 // New note - create and animate
                 noteCard = this.createNoteCard(recording);
