@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Notes</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/recording-modal.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <!-- Spacer for window controls -->
+        </div>
+
+        <div class="search-container">
+            <img src="assets/icons/search.svg" alt="Search" class="search-icon" width="24" height="24">
+
+            <input type="text" placeholder="Search" id="searchInput" class="search-input">
+            <button class="ask-ai-btn">
+                <img src="assets/icons/AI.svg" alt="AI" class="ai-icon" width="16" height="16">
+                Ask AI
+            </button>
+        </div>
+
+        </div>
+
+        <div class="header-right">
+            <button class="icon-btn" id="addNote" aria-label="Add note" title="Add note">
+                <img src="assets/icons/plus.svg" alt="Add note" width="20" height="20">
+            </button>
+            <button class="icon-btn" aria-label="Calendar" title="Calendar">
+                <img src="assets/icons/callender.svg" alt="Calendar" width="20" height="20">
+            </button>
+            <button class="icon-btn" aria-label="Settings" title="Settings">
+                <img src="assets/icons/settings.svg" alt="Settings" width="20" height="20">
+            </button>
+        </div>
+    </header>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+        <button class="tab-btn active" data-filter="all">All</button>
+        <button class="tab-btn" data-filter="shared">Shared</button>
+        <button class="tab-btn" data-filter="starred">Starred</button>
+    </div>
+
+    <!-- Notes List -->
+    <main class="notes-container" id="notesList">
+        <!-- Notes will be dynamically inserted here -->
+        <div class="empty-state" id="emptyState">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="22"></line>
+            </svg>
+            <p>No recordings yet</p>
+            <p class="empty-subtitle">Click the record button below to add a voice note</p>
+        </div>
+    </main>
+
+    <!-- Recording Modal -->
+    <div class="modal-overlay" id="recordingModal">
+        <div class="modal-container">
+            <!-- Initial Start Button -->
+            <button id="startRecordingBtn" class="start-recording-btn">
+                <div class="mic-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                </div>
+                <span class="start-label">Record</span>
+            </button>
+
+            <!-- Active Recording Interface (Initially Hidden) -->
+            <div id="recordingInterface"
+                style="display: none; width: 100%; flex-direction: column; align-items: center;">
+                <button class="modal-expand-btn" id="expandModalBtn" aria-label="Expand">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                </button>
+
+                <div class="modal-handle">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                </div>
+
+                <div class="recording-content">
+                    <!-- Cancel Button (Only visible when expanded) -->
+                    <button class="cancel-recording-btn" id="cancelRecordingBtn">Cancel</button>
+
+                    <!-- Timer Display with Waveform Background -->
+                    <div class="timer-waveform-container">
+                        <!-- Waveform Canvas (Background) -->
+                        <canvas id="waveformCanvas" class="waveform-canvas"></canvas>
+
+                        <!-- Timer and Pause Button (Foreground) -->
+                        <div class="timer-controls">
+                            <button class="pause-btn" id="pauseBtn" aria-label="Pause recording">
+                                <!-- Pause Icon -->
+                                <img src="assets/icons/pause.svg" alt="Pause" class="icon-pause" width="16" height="16">
+                                <!-- Play/Resume Icon -->
+                                <img src="assets/icons/play.svg" alt="Resume" class="icon-play" width="16" height="16">
+                            </button>
+                            <span class="timer-text" id="timerDisplay">00:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Done Button -->
+                    <button class="done-btn" id="doneBtn">Done</button>
+                </div>
+
+                <!-- Hidden Record Button (not used in new design) -->
+                <button class="record-btn" id="recordBtn" style="display: none;">
+                    <div class="record-btn-inner"></div>
+                </button>
+
+                <!-- Expanded Controls -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Player (hidden) -->
+    <audio id="audioPlayer" style="display: none;"></audio>
+
+    <!-- Inline Mobile Player -->
+    <div class="inline-mobile-player" id="inlineMobilePlayer">
+        <div class="inline-player-content">
+            <div class="inline-player-controls">
+                <button class="inline-player-play-btn" id="inlineMobilePlayerPlayPause">▶</button>
+                <div class="inline-player-progress-section">
+                    <div class="inline-player-time" id="inlineMobilePlayerTime">00:00</div>
+                    <div class="inline-player-progress-container" id="inlineMobilePlayerProgressContainer">
+                        <div class="inline-player-progress-bar">
+                            <div class="inline-player-progress-fill" id="inlineMobilePlayerProgressFill"></div>
+                        </div>
+                    </div>
+                    <div class="inline-player-duration" id="inlineMobilePlayerDuration">00:00</div>
+                </div>
+            </div>
+
+            <button class="inline-player-close" id="inlineMobilePlayerClose">&times;</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/storageManager.js"></script>
+    <script src="js/waveformVisualizer.js"></script>
+    <script src="js/audioRecorder.js"></script>
+    <script src="js/uiController.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

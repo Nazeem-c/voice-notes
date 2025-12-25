@@ -1,0 +1,172 @@
+/* Mobile First - Base styles are for mobile */
+@media (max-width: 767px) {
+    body {
+        padding-top: 0;
+        transition: padding-top 0.3s ease;
+    }
+
+    body.player-active {
+        padding-top: 3.25rem;
+    }
+
+    body.player-active .header {
+        top: 3.25rem;
+    }
+
+    .header {
+        padding: 0.75rem 1rem;
+        flex-wrap: wrap;
+        height: auto;
+        gap: 0.75rem;
+    }
+
+    .header-left {
+        width: auto;
+        flex: 1;
+        order: 1;
+    }
+
+    .search-container {
+        order: 3;
+        width: 100%;
+        margin: 0;
+        max-width: none;
+    }
+
+    .header-right {
+        order: 2;
+        width: auto;
+        margin-left: auto;
+    }
+
+    .notes-container {
+        padding: 1rem 1rem;
+        /* padding-top: 4.5rem; */
+    }
+
+
+    /* Hide progress bar on mobile list view (per design) */
+
+
+    /* Hide progress bar and time on mobile note cards */
+    .note-card .progress-container,
+    .note-card .duration-text {
+        display: none !important;
+    }
+
+    /* Adjust audio player padding on mobile since time is hidden */
+    .note-card .audio-player {
+        padding: 0.5rem;
+        flex: 0 0 auto;
+        background: transparent;
+        min-width: 0;
+    }
+
+    /* Current time is hidden in the design until expanded/played, 
+       but for this list view it seems to show duration. 
+       Let's hide the current time span if we want to match strictly "01:23" format 
+       or keep it if we want "00:00 / 01:23". 
+       Design shows "▶ 01:23", implying it's just duration or current status.
+       We'll simplify to just show the text content. */
+
+
+    /* We also need to remove the "/" separator text which is likely hardcoded in JS or HTML. 
+       We can hide the whole duration-text and assume the design shows total duration. */
+
+    .note-actions {
+        display: flex;
+        width: auto;
+        gap: 0.5rem;
+    }
+
+    .note-body {
+        justify-content: space-between;
+    }
+
+    .action-btn {
+        background: #f2f2f7;
+        width: 2.25rem;
+        height: 2.25rem;
+        display: flex;
+    }
+
+    .note-dropdown {
+        right: 0;
+        min-width: 12rem;
+    }
+
+    .dropdown-item {
+        padding: 0.75rem 1rem;
+        font-size: 0.9375rem;
+        gap: 0.75rem;
+    }
+
+    .dropdown-item img {
+        width: 18px;
+        height: 18px;
+        opacity: 0.7;
+    }
+
+    .dropdown-item.delete img {
+        filter: invert(36%) sepia(67%) saturate(1664%) hue-rotate(1deg) brightness(103%) contrast(104%);
+    }
+}
+
+/* Tablet (768px and up) */
+@media (min-width: 768px) {
+    .header {
+        padding: 0.75rem 2rem;
+    }
+
+    .notes-container {
+        padding: 1.5rem 2rem;
+    }
+
+    .inline-mobile-player {
+        display: none !important;
+    }
+}
+
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+
+    /* Keep body white */
+    body {
+        background: var(--primary-bg);
+    }
+
+    .header {
+        padding: 0.75rem 3rem;
+    }
+
+    .notes-container {
+        max-width: 50rem;
+        padding: 2rem 0;
+    }
+}
+
+/* Dark Mode Support (Optional - keeping for completeness but overriding to match white theme request if needed, but usually we want to support user preference. However, the request was specific about "white theme". I will leave dark mode as is, but maybe the user wants ONLY white theme. The prompt says "make this UI white theme". I should probably disable dark mode or make sure the default is white.) */
+/* I will comment out dark mode for now to strictly follow "white theme" request */
+/*
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-bg: #1c1c1e;
+        --secondary-bg: #000000;
+        --text-primary: #ffffff;
+        --text-secondary: #98989d;
+        --border-color: #38383a;
+    }
+}
+*/
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
